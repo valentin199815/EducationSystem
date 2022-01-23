@@ -1,4 +1,5 @@
 <?php
+session_start();
     function createUrl($route){
         return $_SERVER['PHP_SELF']."?addr=".$route;
     }

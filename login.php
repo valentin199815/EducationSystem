@@ -1,6 +1,7 @@
 <?php
 include('./config.php');
 session_start();
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -27,42 +28,62 @@ session_start();
             if($_SERVER['REQUEST_METHOD']=="POST"){
                 $UserEmail = $_POST['email'];
                 $UserPass = $_POST['pass'];
+                $admin = "admin";
+                $teacher = "teacher";
+                $student = "student";
+           
+                #connect to my database
+                $dbserver = "localhost";
+                $dbusername = "root";
+                $dbpassword = "";
+                $database = "manager_system";
+                $dbConnect = new mysqli($dbserver, $dbusername, $dbpassword, $database);
+               
                 
-                $select_admin = "SELECT user_id, email, password, user_type FROM user_tb where 
+                $select_admin = "SELECT * FROM user_tb where 
                 email='".$UserEmail."' AND password='".$UserPass."' AND user_type='".$admin."'";
 
-                $select_teacher = "SELECT user_id, email, password, user_type FROM user_tb where 
+                $select_teacher = "SELECT * FROM user_tb where 
                 email='".$UserEmail."' AND password='".$UserPass."' AND user_type='".$teacher."'";
 
-                $select_student = "SELECT user_id, email, password, user_type FROM user_tb where 
+                $select_student = "SELECT * FROM user_tb where 
                 email='".$UserEmail."' AND password='".$UserPass."' AND user_type='".$student."'";
+
                 $result = $dbConnect->query($select_admin);
                 $result1 = $dbConnect->query($select_teacher);
                 $result2 = $dbConnect->query($select_student);
+
                             if($result->num_rows>0){
                                 while($row = $result->fetch_assoc()){
                                 $_SESSION['user_id'] = $row['user_id'];
                                 }
-                                    $result->close();
-                                    $dbConnect->close();
                                     header("Location: indexAdmin.php?addr=home.php");
                                     exit();
+                                    $result->close();
+                                    $dbConnect->close();
+                                    
+                                    
                             }elseif($result1->num_rows>0){
                                 while($row = $result1->fetch_assoc()){
                                     $_SESSION['user_id'] = $row['user_id'];
+                                    $_SESSION['email'] = $row['email'];
+                                    
                                 }
+                                header("Location: indexTeacher.php?addr=home.php");
+                                exit();
                                     $result1->close();
                                     $dbConnect->close();
-                                    header("Location: indexTeacher.php?addr=home.php");
-                                    exit();
+                                    
                             }elseif($result2->num_rows>0){
                                 while($row = $result2->fetch_assoc()){
                                     $_SESSION['user_id'] = $row['user_id'];
-                                }
+                                   
+                                }   
+                                header("Location: indexStudent.php?addr=home.php");
+                                    exit();
                                     $result2->close();
                                     $dbConnect->close();
-                                    header("Location: indexStudent.php?addr=home.php");
-                                    exit();
+                                    
                             } else{
                                 echo "Wrong Username/Password";
                             }

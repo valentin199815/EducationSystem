@@ -1,4 +1,6 @@
 <?php
+session_start();
+
     function createUrl($route){
         return $_SERVER['PHP_SELF']."?addr=".$route;
     }
@@ -19,8 +21,8 @@
         <nav>
             <a href="<?php echo createUrl('home.php') ?>">Home</a>
             <a href="<?php echo createUrl('register.php') ?>">Register</a>
-            <a href="<?php echo createUrl('modify.php') ?>">Edit / Modify</a>
             <a href="<?php echo createUrl('list.php') ?>">List</a>
+            <a href="<?php echo createUrl('modify.php') ?>">Edit</a>
         </nav>
         <main>
             <?php
