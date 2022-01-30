@@ -1,62 +1,105 @@
 <!DOCTYPE html>
     <html>
         <head>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
         <style>
-            .maincontainer{width: 50%; margin: auto;}
-            input{width: 100%; padding: 5px 0; margin-bottom: 30px;}
-            button{background-color: lightseagreen; color: white; 
-                padding: 16px 20px; outline: 0; border: 0; border-radius: 5px; cursor: pointer;}
-            input[type=radio]{width: 10%; padding: 0; margin: 0 50 0 0px}
+            .maincontainer{margin: 50px 0;}
+            .maincontainer h1{margin-bottom: 30px;}
+            
         </style>
         </head>
         <body>
         <div class="maincontainer">
             <h1>Register new User</h1>
-            <form method="POST" action="<?php echo $_SERVER['PHP_SELF'].'?addr=register.php' ?>" enctype="multipart/form-data">
-                <label>User Type</label><br>
-
-                Teacher<input type="radio" name="usertype" value="teacher">
-                Student<input type="radio" name="usertype" value="student">
-                Admin<input type="radio" name="usertype" value="admin"><br>
-                <label>First Name</label>
-                <input type="text" name="fname">
-                <label>Last Name</label>
-                <input type="text" name="lname">
-                <label>Email</label>
-                <input type="email" name="email">
-                <label>Date of Birth</label>
-                <input type="text" name="dob">
-                <label>Profile Picture</label>
-                <input type="file" name="picture">
-                <label>Vaccine</label><br>
-                Yes<input type="radio" name="vaci" value="Yes">
-                No<input type="radio" name="vaci" value="No"><br>
-                <label>Gender</label>
-                <input type="text" name="gender">
-                <label>Address</label>
-                <input type="text" name="address">
-                <label>Country</label>
-                <input type="text" name="country">
-                <label>Position</label>
-                <input type="text" name="position">
-                <label>Password</label>
-                <input type="password" name="pass">
+            <form class="row g-3" method="POST" action="<?php echo $_SERVER['PHP_SELF'].'?addr=register.php' ?>" enctype="multipart/form-data">
+                <div class="col-md-4">
+                    <label for="inputState" class="form-label">User Type</label>
+                    <select id="inputState" class="form-select" name="usertype">
+                        <option selected  value="teacher">Teacher</option>
+                        <option selected  value="student">Student</option>
+                        <option selected  value="admin">Admin</option>
+                    </select>
+                </div>    
+                <div class="col-md-4">
+                    <label for="inputEmail4" class="form-label">First Name</label>
+                    <input type="text" class="form-control" id="inputEmail4" name="fname">
+                </div>
+                <div class="col-md-4">
+                    <label for="inputEmail4" class="form-label">Last Name</label>
+                    <input type="text" class="form-control" id="inputEmail4" name="lname">
+                </div>
+                <div class="col-md-6">
+                    <label for="inputPassword4" class="form-label">Email</label>
+                    <input type="email" class="form-control" id="inputPassword4" name="email">
+                </div>
+                <div class="col-md-6">
+                    <label for="inputPassword4" class="form-label">Date of Birth</label>
+                    <input type="date" class="form-control" id="inputPassword4" name="dob">
+                </div>
+                <div class="col-md-6">
+                    <label for="inputPassword4" class="form-label">Profile Picture</label>
+                    <input type="file" class="form-control" id="inputPassword4" name="picture">
+                </div>
+                <div class="col-md-3">
+                    <label for="inputState" class="form-label">Vaccine</label>
+                        <select id="inputState" class="form-select" name="vaci">
+                            <option selected value="Yes"  >Yes</option>
+                            <option  value="No" >No</option>
+                            <option  value="Rather don't say" >I don't know</option>
+                        </select>
+                    
+                </div>
+                <div class="col-md-3">
+                    <label for="inputState" class="form-label">Gender</label>
+                        <select id="inputState" class="form-select" name="gender">
+                            <option  value="Male"  >Male</option>
+                            <option selected value="Female"  >Female</option>
+                            <option  value="Other" >Other</option>
+                        </select>
+                </div>
+                <div class="col-12">
+                    <label for="inputAddress2" class="form-label">Address</label>
+                    <input type="text" class="form-control" id="inputAddress2" placeholder="1234 Main St" name="address">
+                </div>
+                <div class="col-md-6">
+                    <label for="inputCity" class="form-label">Country</label>
+                    <input type="text" class="form-control" id="inputCity" name="country">
+                </div>
+                <div class="col-md-6">
+                    <label for="inputCity" class="form-label">Position</label>
+                    <input type="text" class="form-control" id="inputCity" name="position">
+                </div>
+                <div class="col-md-6">
+                    <label for="inputCity" class="form-label">Password</label>
+                    <input type="password" class="form-control" id="inputCity" name="pass">
+                </div>
                 
-                <button type="submit">Register</button>
-                <span></span>
+                <div class="col-12">
+                    <button type="submit" class="btn btn-primary">Register</button>
+                </div>
             </form>
+            
         </div>
 
         <?php
             if($_SERVER['REQUEST_METHOD'] == "POST"){
-               $usertype =  $_POST['usertype'];
+                if(isset($_POST['vaci'])){
+                    $vaci =  $_POST['vaci'];
+                }
+                if(isset($_POST['usertype'])){
+                    $usertype =  $_POST['usertype'];
+                }
+                if(isset($_POST['gender'])){
+                    $gender =  $_POST['gender'];
+                }
+               
                $fname =  $_POST['fname'];
                $lname =  $_POST['lname'];
                $email =  $_POST['email'];
                $dob =  $_POST['dob'];
                $picture = './usersimg/' .$_FILES['picture']['name'];
-               $vaci =  $_POST['vaci'];
-               $gender =  $_POST['gender'];
+               
+              
                $address =  $_POST['address'];
                $country =  $_POST['country'];
                $position =  $_POST['position'];
@@ -66,10 +109,10 @@
 
                function upload($sourcefile,$destfile){ #function to move the file into the folder
                 if(move_uploaded_file($sourcefile,$destfile)){
-                    echo "<p style='color:blue;'>File has been uploaded </p>";
+                    
                     return true;
                 }else{
-                    echo "<p style='color:red;'>File has not been uploaded </p>";
+                    
                     return false;
                 }
             }
@@ -94,12 +137,12 @@
                                 echo "<p>Sorry, this user already exists";
                             }else{
                                 $salt = rand();
-                                // $mypass = md5($pass.$salt);
+                                $mypass = md5($pass.$salt);
                                 
 
                                 $inserttable = "INSERT INTO `user_tb`(`email`, `password`, `fname`, `lname`, `DOB`, 
                                 `profile_picture`, `vaccine`, `gender`, `address`, `country`, `position`, `salt`, 
-                                `user_type`) VALUES ('$email','$pass','$fname','$lname','$dob','$picture','$vaci',
+                                `user_type`) VALUES ('$email','$mypass','$fname','$lname','$dob','$picture','$vaci',
                                 '$gender','$address',' $country','$position','$salt',' $usertype')";
 
                                 

@@ -1,28 +1,32 @@
 <!DOCTYPE html>
 <html>
     <head>
-
+        <style>
+            .maincontainer{text-align: center; margin-top: 30px;}
+            #myul{width: 10%; margin: auto; font-size: 20px;}
+        </style>
     </head>
     <body>
-    <div>
+    <div class="maincontainer">
         
         <?php
             
             
-                echo "<h1>These are the courses you are currently teaching</h1>";
+            echo "<h1>These are the courses you are currently teaching</h1>";
               $dbserver = "localhost";
               $dbusername = "root";
               $dbpassword = "";
               $database = "manager_system";
-              $email = $_SESSION['email'];
+              $id = $_SESSION['user_id'];
+              
               $dbConnect = new mysqli($dbserver, $dbusername, $dbpassword, $database);
 
-              $selectcourses = "SELECT * FROM `course_tb` WHERE teacher_email='$email'";
+              $selectcourses = "SELECT * FROM `course_tb` WHERE teacher_email='$id'";
               $result = $dbConnect->query($selectcourses);
                   if($result->num_rows>0){
-                      echo "<ul>";
+                      echo "<ul id='myul'>";
                       while($row = $result->fetch_assoc()){
-                          echo "<p>" .$row['course_name']. "</p>" ;
+                          echo "<li>" .$row['course_name']. "</li>" ;
                       }
                       echo "</ul>";
                   }else{

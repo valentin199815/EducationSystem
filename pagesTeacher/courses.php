@@ -1,11 +1,27 @@
 <!DOCTYPE html>
 <html>
     <head>
-
+        <style>
+            .buttons{text-align: center;}
+            .buttons a{
+                color: black;
+                display: block;
+                font-size: 25px;
+                text-decoration: none;
+            }
+            .buttons a:hover{
+                background-color: white;
+                text-decoration: underline;
+            }
+            .maincontainer{                
+                text-align: center;
+                margin-top: 30px;
+            }
+        </style>
     </head>
     <body>
-    <div>
-        
+    <div class="maincontainer">
+        <h2>Choose a course to set marks and comments to students</h2>
         <?php
             
             // echo "<h2> Hi " .$_SESSION['fname']. " " .$_SESSION['fname']. "</h2>";
@@ -14,7 +30,7 @@
               $dbusername = "root";
               $dbpassword = "";
               $database = "manager_system";
-              $email = $_SESSION['email'];
+              $email = $_SESSION['user_id'];
               $dbConnect = new mysqli($dbserver, $dbusername, $dbpassword, $database);
 
               $selectcourses = "SELECT * FROM `course_tb` WHERE teacher_email='$email'";
@@ -22,7 +38,8 @@
                   if($result->num_rows>0){
                       echo "<ul>";
                       while($row = $result->fetch_assoc()){
-                          echo "<p>" .$row['course_name']. "</p>" ;
+                          echo "<div class='buttons'><a  href='#'>" .$row['course_name']. "</a></div>" ;
+                          
                       }
                       echo "</ul>";
                   }else{

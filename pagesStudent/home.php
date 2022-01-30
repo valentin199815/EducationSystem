@@ -2,9 +2,32 @@
 <html>
     <head>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <style>
+        .maincontainer{
+            margin: 40px 0;
+        }
+        
+    </style>
     </head>
     <body ng-app="myapp" ng-controller="myctrl">
+        <div class="maincontainer">
         <h1>My information</h1>
+        <table class="table">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">First Name</th>
+                    <th scope="col">Last Name</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Date of Birth</th>
+                    <th scope="col">Vaccine</th>
+                    <th scope="col">Gender</th>
+                    <th scope="col">Address</th>
+                    <th scope="col">Country</th>
+                    <th scope="col">Position</th>
+                </tr>
+            </thead>
+            <tbody>
         <?php
                 
                     $dbserver = "localhost";
@@ -17,16 +40,14 @@
                     $selectinfo = "SELECT * FROM `user_tb` WHERE user_id='$userid'";
                     $result = $dbConnect->query($selectinfo);
                     if($result->num_rows>0)
-                        echo "<table><tr><th>First Name</th><th>Last Name</th><th>Email</th><th>Date of bith</th><th>Vaccine</th>
-                        <th>Picture</th><th>Gender</th><th>Address</th><th>Country</th><th>Position</th></tr>";
                         while($row = $result->fetch_assoc()){
                             echo "<tr>";
-                            echo "<td>  " .$row['fname']. "</td>";
+                            echo "<th scope='row'>".$row['fname']. "</th>";
                             echo "<td>  " .$row['lname']. "</td>";
                             echo "<td>  " .$row['email']. "</td>";
                             echo "<td>  " .$row['DOB']. "</td>";
                             echo "<td>  " .$row['vaccine']. "</td>";
-                            echo "<td><img src=''>";
+                            
                             echo "<td>  " .$row['gender']. "</td>";
                             echo "<td>  " .$row['address']. "</td>";
                             echo "<td>  " .$row['country']. "</td>";
@@ -34,46 +55,79 @@
                             
                         }
                     
-                    echo "</tr></table>";
+                    
                         $dbConnect->close();
                 ?>
-            <button type="button" ng-click="display();" ng-show="button"  >Update Info</button>
-            <div ng-show="addcourse">
-                <form method="POST"  action="<?php echo $_SERVER['PHP_SELF'].'?addr=home.php' ?>">
-                    <label>First Name</label>
-                    <input type="text" name="newfname"><br>
-                    <label>Last name</label>
-                    <input type="text" name="newlname"><br>
-                    <label>Date of birth</label>
-                    <input type="text" name="newdob"><br>
-                    <label>Email</label>
-                    <input type="text" name="newemail"><br>
-                    <label>Vaccine</label><br>
-                Yes<input type="radio" name="newvac" value="Yes">
-                No<input type="radio" name="newvac" value="No"><br>
-                    <label>Gender</label>
-                    <input type="text" name="newgender"><br>
+                </tbody>
+                </table>
+            <button type="button" ng-click="display();" class="btn btn-primary" ng-show="button"  >Update Info</button>
+            <div ng-show="addcourse" class="addcourse">
+                <form method="POST" class="row g-3"  action="<?php echo $_SERVER['PHP_SELF'].'?addr=home.php' ?>">
+                <div class="col-md-4">
+                    <label for="inputEmail4" class="form-label">First Name</label>
+                    <input type="text" class="form-control" id="inputEmail4" name="newfname">
+                </div>
+                <div class="col-md-4">
+                    <label for="inputEmail4" class="form-label">Last Name</label>
+                    <input type="text" class="form-control" id="inputEmail4" name="newlname">
+                </div>
+                <div class="col-md-4">
+                    <label for="inputPassword4" class="form-label">Email</label>
+                    <input type="email" class="form-control" id="inputPassword4" name="newemail">
+                </div>
+                <div class="col-md-6">
+                    <label for="inputPassword4" class="form-label">Date of Birth</label>
+                    <input type="date" class="form-control" id="inputPassword4" name="newdob">
+                </div>
+                <div class="col-md-3">
+                    <label for="inputState" class="form-label">Vaccine</label>
+                        <select id="inputState" class="form-select" name="newvac">
+                            <option selected value="Yes"  >Yes</option>
+                            <option  value="No" >No</option>
+                            <option  value="Rather don't say" >I don't know</option>
+                        </select>
                     
-                    <label>Address</label>
-                    <input type="text" name="newaddress"><br>
-                    <label>Country</label>
-                    <input type="text" name="newcountry"><br>
-                    <label>Position</label>
-                    <input type="text" name="newposition"><br>
-
-                    
-                    <button type="submit">Update</button>
+                </div>
+                <div class="col-md-3">
+                    <label for="inputState" class="form-label">Gender</label>
+                        <select id="inputState" class="form-select" name="newgender">
+                            <option  value="Male"  >Male</option>
+                            <option selected value="Female"  >Female</option>
+                            <option  value="Other" >Other</option>
+                        </select>
+                </div>
+                <div class="col-12">
+                    <label for="inputAddress2" class="form-label">Address</label>
+                    <input type="text" class="form-control" id="inputAddress2" placeholder="1234 Main St" name="newaddress">
+                </div>
+                <div class="col-md-6">
+                    <label for="inputCity" class="form-label">Country</label>
+                    <input type="text" class="form-control" id="inputCity" name="newcountry">
+                </div>
+                <div class="col-md-6">
+                    <label for="inputCity" class="form-label">Position</label>
+                    <input type="text" class="form-control" id="inputCity" name="newposition">
+                </div>
+                <div class="col-12">
+                    <button type="submit" class="btn btn-primary">Update</button>
+                </div>
+                   
                 </form>
+            </div>
             </div>
             <?php
             if($_SERVER['REQUEST_METHOD'] == "POST"){
+                if(isset($_POST['newvac'])){
+                    $newvaci =  $_POST['newvac'];
+                }
+                
+                if(isset($_POST['newgender'])){
+                    $newgender =  $_POST['newgender'];
+                }
                 $newfname =  $_POST['newfname'];
                 $newlname =  $_POST['newlname'];
                 $newemail =  $_POST['newemail'];
-                $newdob =  $_POST['newdob'];
-                
-                $newvaci =  $_POST['newvac'];
-                $newgender =  $_POST['newgender'];
+                $newdob =  $_POST['newdob'];                
                 $newaddress =  $_POST['newaddress'];
                 $newcountry =  $_POST['newcountry'];
                 $newposition =  $_POST['newposition'];
@@ -91,7 +145,7 @@
                         `vaccine`='$newvaci',`gender`='$newgender',`address`='$newaddress',`country`='$newcountry',
                         `position`='$newposition' WHERE user_id='$userid'";
                             if($dbConnect->query($updateinfo) === TRUE){
-                                echo "<p style='text-align:center;'> Information Succesfully updated!</p>";
+                                echo "<p style='text-align:center;'> Information Succesfully updated! Refresh the page</p>";
                             }else{
                                 echo "<p>There was a problem, please try again later</p>";
                             }

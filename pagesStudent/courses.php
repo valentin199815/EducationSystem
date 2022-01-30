@@ -1,19 +1,26 @@
 <!DOCTYPE html>
 <html>
     <head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
         <style>
-            .mycourses, .addnewcourse{
-                width: 50%;
-                margin: auto;
+            .maindiv{
+                padding: 50px 0;
+                display: grid;
+                grid-template-columns: 50% 50%;
+            }
+            .mybtn{
                 text-align: center;
+                margin: 30px auto;
             }
             
             
         </style>
     </head>
     <body>
-        <div class="mycourses">
-            <h2>My enrolled courses</h2>
+        <div class="maindiv">
+            <div class="mycourses">
+                <h2>My enrolled courses</h2>                   
+            
         <?php
               $dbserver = "localhost";
               $dbusername = "root";
@@ -27,7 +34,7 @@
                   if($result->num_rows>0){
                       echo "<ul>";
                       while($row = $result->fetch_assoc()){
-                          echo "<p>" .$row['course_name']. "</p>" ;
+                          echo "<li>" .$row['course_name']. "</li>" ;
                       }
                       echo "</ul>";
                   }else{
@@ -35,15 +42,15 @@
                   }
                   $dbConnect->close();
         ?>
+            
         </div>
-        <div class="addnewcourse">
+        <div class="row g-3">
 
             <form method="POST" action="<?php echo $_SERVER['PHP_SELF'].'?addr=courses.php' ?>" >
-                    <h1>Register to a new course</h1>
+                    <h2>Register to a new course</h2>
                     <p>Available Courses</p>
-                    
+                    <select id="inputState" class="form-select" name="pipo">
                     <?php
-                    
                         $dbserver = "localhost";
                         $dbusername = "root";
                         $dbpassword = "";
@@ -53,54 +60,70 @@
                         $selectcourses = "SELECT * FROM `course_tb` WHERE 1";
                         $result = $dbConnect->query($selectcourses);
                             if($result->num_rows>0){
-                                echo "<select name='option'>";
+                                
                                 while($row = $result->fetch_assoc()){
                                     echo "<option value='".$row['course_name']."'>" .$row['course_name']. "</option>" ;
                                     $_GET['coursename'] = $row['course_name'];
                                 }
-                                echo "</select>";
+                                
                             }
-
-                        $selectteacher = "SELECT * FROM `course_tb` WHERE course_name='".$_GET['coursename']."'";
-                        echo $_GET['coursename'];
-                        $result1 = $dbConnect->query($selectteacher);
-                            if($result1->num_rows>0){
-                                echo "<select name='option'>";
-                                while($row = $result->fetch_assoc()){
-                                    echo $row['teacher_name'];
-                                    // echo "<option value='".$row['course_name']."'>" .$row['teacher_name']. "</option>" ;
-                                    
-                                }
-                                echo "</select>";
-                            }
-                            $dbConnect->close();
+                            
                     ?>
-                    <button type="submit">Register</button>
+                    </select>
+                    <div class="mybtn"><button type="submit" class="btn btn-primary">Register</button></div>
+                    
+                    
             </form>
+        </div>
         </div>
         <?php
             if($_SERVER['REQUEST_METHOD']=="POST"){
+                if(isset($_POST['pipo'])){
+                    $myteacher = $_POST['pipo'];
+                
+                        $dbserver = "localhost";
+                        $dbusername = "root";
+                        $dbpassword = "";
+                        $database = "manager_system";
+                        $dbConnect = new mysqli($dbserver, $dbusername, $dbpassword, $database);
+                        $selectteacher = "SELECT * FROM `course_tb` WHERE course_name='$myteacher'";
+                   
+                        $result1 = $dbConnect->query($selectteacher);
+                        if($result1->num_rows>0){
+                            
+                            while($row = $result1->fetch_assoc()){
+                                $_GET['tid'] = $row['teacher_email'];
+                                $_GET['cid'] = $row['course_id'];                                
+                            }
+                           
+                        }else{
+                            echo "nothing found";
+                        }
+                        $dbConnect->close();
+                    } 
                 $dbserver = "localhost";
                 $dbusername = "root";
                 $dbpassword = "";
                 $database = "manager_system";
-                $option = $_POST['option'];
+                //$option = $_POST['option'];
                 $userid = $_SESSION['user_id'];
+                $tid = $_GET['tid'];
+                $cid =  $_GET['cid'];
                 $dbConnect = new mysqli($dbserver, $dbusername, $dbpassword, $database);
-                $selectreg = "select * from registration_tb where student_id='".$userid."' AND course_name='".$option."' " ;
+                $selectreg = "select * from registration_tb where student_id='".$userid."' AND course_name='".$myteacher."' " ;
                 $result = $dbConnect->query($selectreg);
                     if($result->num_rows>0){
-                        echo "<p>Sorry, you are already registered in this course";
+                        echo "<p style='text-align:center;'>Sorry, you are already registered in this course</p>";
                     }else{
                         $sendData  = "INSERT INTO `registration_tb`(`student_id`, `course_name`) 
-                        VALUES ('$userid','$option')";
-                         $result1 = $dbConnect->query($sendData);
-                            if($dbConnect->query($result1) === TRUE){
+                        VALUES ('$userid','$myteacher')";
+                            if($dbConnect->query($sendData) === TRUE){
                                 echo "<p style='text-align:center;'> Succesfully registered </p>";
                                 
                             }else{
-                                echo "<p style='text-align:center;'> Succesfully registered </p>";
+                                echo "<p style='text-align:center;'> Not Succesfully registered </p>";
                             }
+                            
                     }
                     $dbConnect->close();
 
